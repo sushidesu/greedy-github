@@ -4,8 +4,12 @@
   "main": "index.js",
   "author": "sushidesu",
   "license": "MIT",
+  "scripts": {
+    "build:contents": "swc src/contents/hello.ts -d dist"
+  },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.212"
+    "@swc/core": "^1.2.212",
+    "cpy": "^9.0.1"
   }
 }
