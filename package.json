@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "sushidesu",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.212"
+  }
 }
