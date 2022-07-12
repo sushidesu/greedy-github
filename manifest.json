@@ -2,5 +2,11 @@
   "$schema": "https://json.schemastore.org/chrome-manifest",
   "manifest_version": 3,
   "name": "Greedy GitHub",
-  "version": "1.0"
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["./contents/hello.js"]
+    }
+  ]
 }

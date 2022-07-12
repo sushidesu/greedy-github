@@ -5,7 +5,9 @@
   "author": "sushidesu",
   "license": "MIT",
   "scripts": {
-    "build:contents": "swc src/contents/hello.ts -d dist"
+    "build": "concurrently yarn:build:*",
+    "build:manifest": "node --experimental-modules scripts/build-manifest.mjs",
+    "build:contents": "node --experimental-modules scripts/build-content-scripts.mjs"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
