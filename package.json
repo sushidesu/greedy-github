@@ -10,8 +10,6 @@
     "build:contents": "node --experimental-modules scripts/build-content-scripts.mjs"
   },
   "devDependencies": {
-    "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.212",
     "concurrently": "^7.2.2",
     "cpy": "^9.0.1",
     "execa": "^6.1.0",
