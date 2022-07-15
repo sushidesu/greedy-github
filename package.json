@@ -5,6 +5,7 @@
   "author": "sushidesu",
   "license": "MIT",
   "scripts": {
+    "prebuild": "del ./dist/*",
     "build": "concurrently yarn:build:*",
     "build:manifest": "node --experimental-modules scripts/build-manifest.mjs",
     "build:contents": "node --experimental-modules scripts/build-content-scripts.mjs"
