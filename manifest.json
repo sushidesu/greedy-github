@@ -5,8 +5,8 @@
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["https://github.com/*"],
-      "js": ["./contents/hello.js"]
+      "matches": ["https://github.com/*/*/pull/*"],
+      "js": ["./contents/copy-commit-hash-in-pr.js"]
     }
   ]
 }
