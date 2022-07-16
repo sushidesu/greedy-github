@@ -10,17 +10,15 @@ const copyCommentHashInPR = (logger: Logger) => {
     const hash = hashContainer.querySelector("code > a")?.textContent
     const copyHashButton = document.createElement("button")
     copyHashButton.textContent = "Copy"
-    copyHashButton.classList.add("btn", "btn-sm")
+    copyHashButton.classList.add("btn", "btn-sm", "ml-2", "mb-1")
     copyHashButton.onclick = () => {
       if (hash) {
         logger.message(`copied commit hash ${hash}`)
         navigator.clipboard.writeText(hash)
       }
     }
-    hashContainer.appendChild(copyHashButton)
+    c.appendChild(copyHashButton)
   }
-  Array.from(commits.values()).forEach(c => {
-  })
 }
 
 const logger = createLogger()
