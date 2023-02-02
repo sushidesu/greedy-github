@@ -9,7 +9,8 @@
     "build": "concurrently yarn:build:*",
     "build:manifest": "node --experimental-modules scripts/build-manifest.mjs",
     "build:contents": "node --experimental-modules scripts/build-content-scripts.mjs",
-    "build:images": "node --experimental-modules scripts/build-images.mjs"
+    "build:images": "node --experimental-modules scripts/build-images.mjs",
+    "build:background": "node --experimental-modules scripts/build-background.mjs"
   },
   "devDependencies": {
     "concurrently": "^7.2.2",
