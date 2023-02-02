@@ -13,6 +13,7 @@
     "build:background": "node --experimental-modules scripts/build-background.mjs"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.211",
     "concurrently": "^7.2.2",
     "cpy": "^9.0.1",
     "del-cli": "^4.0.1",
