@@ -32,14 +32,12 @@ const createCopyHashButton = (hash: string): HTMLButtonElement => {
   copyHashButton.textContent = "Copy";
   copyHashButton.classList.add("btn", "btn-sm", "ml-2", "mb-1", BUTTON_ID);
   copyHashButton.onclick = () => {
-    if (hash) {
-      navigator.clipboard.writeText(hash);
-      copyHashButton.textContent = "Copied!";
-      logger.message(`copied commit hash ${hash}`);
-      setTimeout(() => {
-        copyHashButton.textContent = "Copy";
-      }, 2000);
-    }
+    navigator.clipboard.writeText(hash);
+    copyHashButton.textContent = "Copied!";
+    logger.message(`copied commit hash ${hash}`);
+    setTimeout(() => {
+      copyHashButton.textContent = "Copy";
+    }, 2000);
   };
   return copyHashButton;
 };
