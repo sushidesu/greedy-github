@@ -11,10 +11,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://github.com/*/*/pull/*"],
-      "js": ["./contents/copy-commit-hash-in-pr.js"]
-    }
-  ]
+  "permissions": ["tabs", "scripting"],
+  "host_permissions": ["https://github.com/*"]
 }
