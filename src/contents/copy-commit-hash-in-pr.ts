@@ -1,30 +1,81 @@
 import { Logger, createLogger } from "../utils/logger";
 
 const BUTTON_ID = "gg-copy-hash-button";
+const PROCESSED_ATTR = "data-gg-processed";
+const TIMELINE_ITEM_SELECTOR = ".TimelineItem";
+const COMMIT_ITEM_HINT_SELECTOR = ".TimelineItem-badge .octicon-git-commit";
+const COMMIT_LINK_SELECTORS = [
+  ".text-right.ml-1 a[href*=\"/commits/\"]",
+  "a[href*=\"/commits/\"] > code",
+  "a[href*=\"/commit/\"] > code",
+  "a.commit-link > tt"
+];
+
+const extractHash = (target: Element): string | null => {
+  for (const selector of COMMIT_LINK_SELECTORS) {
+    const node = target.querySelector(selector);
+    const text = node?.textContent?.trim();
+    if (!text) continue;
+
+    if (/^[0-9a-f]{7,40}$/i.test(text)) return text;
+  }
+  return null;
+};
+
+const addCopyButton = (item: Element, hash: string) => {
+  if (item.getAttribute(PROCESSED_ATTR) === "true") return;
+
+  const oldButtons = item.querySelectorAll(`:scope > button.${BUTTON_ID}`);
+  for (const b of Array.from(oldButtons.values())) {
+    item.removeChild(b);
+  }
+
+  const copyHashButton = createCopyHashButton(hash);
+  item.appendChild(copyHashButton);
+  item.setAttribute(PROCESSED_ATTR, "true");
+};
+
+const isCommitItem = (item: Element): boolean => {
+  if (item.querySelector(COMMIT_ITEM_HINT_SELECTOR)) return true;
+  return COMMIT_LINK_SELECTORS.some((selector) =>
+    Boolean(item.querySelector(selector))
+  );
+};
+
+const processTimelineItems = (root: ParentNode) => {
+  const items = Array.from(root.querySelectorAll(TIMELINE_ITEM_SELECTOR));
+  for (const item of items) {
+    if (!isCommitItem(item)) continue;
+    const hash = extractHash(item);
+    if (!hash) continue;
+    addCopyButton(item, hash);
+  }
+};
 
 const copyCommentHashInPR = (logger: Logger) => {
   logger.messageOnLoaded();
 
-  const commits = document.querySelectorAll(
-    ".TimelineItem.TimelineItem--condensed"
-  );
-  for (const c of Array.from(commits.values())) {
-    const hashContainer = c.querySelector(".text-right.ml-1");
-    if (hashContainer === null) continue;
+  processTimelineItems(document);
 
-    const hash = hashContainer.querySelector("code > a")?.textContent;
-    if (typeof hash !== "string") continue;
+  const root =
+    document.querySelector(".js-discussion") ?? document.body;
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      for (const added of Array.from(mutation.addedNodes.values())) {
+        if (!(added instanceof Element)) continue;
 
-    // 既にコピーボタンがる場合は消す
-    const oldButtons = c.querySelectorAll(`:scope > button.${BUTTON_ID}`);
-    for (const b of oldButtons) {
-      c.removeChild(b);
+        if (added.matches(TIMELINE_ITEM_SELECTOR)) {
+          if (!isCommitItem(added)) continue;
+          const hash = extractHash(added);
+          if (hash) addCopyButton(added, hash);
+        }
+
+        processTimelineItems(added);
+      }
     }
+  });
 
-    // コピーボタンを追加
-    const copyHashButton = createCopyHashButton(hash);
-    c.appendChild(copyHashButton);
-  }
+  observer.observe(root, { childList: true, subtree: true });
 };
 
 const createCopyHashButton = (hash: string): HTMLButtonElement => {
