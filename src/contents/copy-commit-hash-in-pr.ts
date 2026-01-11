@@ -2,7 +2,8 @@ import { Logger, createLogger } from "../utils/logger";
 
 const BUTTON_ID = "gg-copy-hash-button";
 const PROCESSED_ATTR = "data-gg-processed";
-const TIMELINE_ITEM_SELECTOR = ".TimelineItem.TimelineItem--condensed";
+const TIMELINE_ITEM_SELECTOR = ".TimelineItem";
+const COMMIT_ITEM_HINT_SELECTOR = ".TimelineItem-badge .octicon-git-commit";
 const COMMIT_LINK_SELECTORS = [
   ".text-right.ml-1 a[href*=\"/commits/\"]",
   "a[href*=\"/commits/\"] > code",
@@ -34,9 +35,17 @@ const addCopyButton = (item: Element, hash: string) => {
   item.setAttribute(PROCESSED_ATTR, "true");
 };
 
+const isCommitItem = (item: Element): boolean => {
+  if (item.querySelector(COMMIT_ITEM_HINT_SELECTOR)) return true;
+  return COMMIT_LINK_SELECTORS.some((selector) =>
+    Boolean(item.querySelector(selector))
+  );
+};
+
 const processTimelineItems = (root: ParentNode) => {
   const items = Array.from(root.querySelectorAll(TIMELINE_ITEM_SELECTOR));
   for (const item of items) {
+    if (!isCommitItem(item)) continue;
     const hash = extractHash(item);
     if (!hash) continue;
     addCopyButton(item, hash);
@@ -56,6 +65,7 @@ const copyCommentHashInPR = (logger: Logger) => {
         if (!(added instanceof Element)) continue;
 
         if (added.matches(TIMELINE_ITEM_SELECTOR)) {
+          if (!isCommitItem(added)) continue;
           const hash = extractHash(added);
           if (hash) addCopyButton(added, hash);
         }
