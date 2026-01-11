@@ -11,18 +11,18 @@ const COMMIT_LINK_SELECTORS = [
   "a.commit-link > tt"
 ];
 
-const extractHash = (target: Element): string | null => {
+const extractCommitUrl = (target: Element): string | null => {
   for (const selector of COMMIT_LINK_SELECTORS) {
     const node = target.querySelector(selector);
-    const text = node?.textContent?.trim();
-    if (!text) continue;
-
-    if (/^[0-9a-f]{7,40}$/i.test(text)) return text;
+    const link = node?.closest("a");
+    const href = link?.getAttribute("href")?.trim();
+    if (!href) continue;
+    return new URL(href, window.location.href).toString();
   }
   return null;
 };
 
-const addCopyButton = (item: Element, hash: string) => {
+const addCopyButton = (item: Element, commitUrl: string) => {
   if (item.getAttribute(PROCESSED_ATTR) === "true") return;
 
   const oldButtons = item.querySelectorAll(`:scope > button.${BUTTON_ID}`);
@@ -30,7 +30,7 @@ const addCopyButton = (item: Element, hash: string) => {
     item.removeChild(b);
   }
 
-  const copyHashButton = createCopyHashButton(hash);
+  const copyHashButton = createCopyHashButton(commitUrl);
   item.appendChild(copyHashButton);
   item.setAttribute(PROCESSED_ATTR, "true");
 };
@@ -46,9 +46,9 @@ const processTimelineItems = (root: ParentNode) => {
   const items = Array.from(root.querySelectorAll(TIMELINE_ITEM_SELECTOR));
   for (const item of items) {
     if (!isCommitItem(item)) continue;
-    const hash = extractHash(item);
-    if (!hash) continue;
-    addCopyButton(item, hash);
+    const commitUrl = extractCommitUrl(item);
+    if (!commitUrl) continue;
+    addCopyButton(item, commitUrl);
   }
 };
 
@@ -66,8 +66,8 @@ const copyCommentHashInPR = (logger: Logger) => {
 
         if (added.matches(TIMELINE_ITEM_SELECTOR)) {
           if (!isCommitItem(added)) continue;
-          const hash = extractHash(added);
-          if (hash) addCopyButton(added, hash);
+          const commitUrl = extractCommitUrl(added);
+          if (commitUrl) addCopyButton(added, commitUrl);
         }
 
         processTimelineItems(added);
@@ -78,14 +78,14 @@ const copyCommentHashInPR = (logger: Logger) => {
   observer.observe(root, { childList: true, subtree: true });
 };
 
-const createCopyHashButton = (hash: string): HTMLButtonElement => {
+const createCopyHashButton = (commitUrl: string): HTMLButtonElement => {
   const copyHashButton = document.createElement("button");
   copyHashButton.textContent = "Copy";
   copyHashButton.classList.add("btn", "btn-sm", "ml-2", "mb-1", BUTTON_ID);
   copyHashButton.onclick = () => {
-    navigator.clipboard.writeText(hash);
+    navigator.clipboard.writeText(commitUrl);
     copyHashButton.textContent = "Copied!";
-    logger.message(`copied commit hash ${hash}`);
+    logger.message(`copied commit url ${commitUrl}`);
     setTimeout(() => {
       copyHashButton.textContent = "Copy";
     }, 2000);
