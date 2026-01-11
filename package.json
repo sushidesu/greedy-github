@@ -11,8 +11,9 @@
     "build:contents": "node --experimental-modules scripts/build-content-scripts.mjs",
     "build:images": "node --experimental-modules scripts/build-images.mjs",
     "build:background": "node --experimental-modules scripts/build-background.mjs",
+    "build:options": "node --experimental-modules scripts/build-options.mjs",
     "package": "yarn build && yarn package:zip",
-    "package:zip": "cd dist && zip -r ../greedy-github.zip manifest.json background.js contents images"
+    "package:zip": "cd dist && zip -r ../greedy-github.zip manifest.json background.js contents images options.html options.js"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.211",

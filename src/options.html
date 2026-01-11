@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Greedy GitHub Options</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: 24px;
+        color: #24292f;
+        background: #ffffff;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 16px;
+      }
+      .option-group {
+        display: grid;
+        grid-template-columns: 16px 1fr;
+        column-gap: 8px;
+        row-gap: 4px;
+        margin: 8px 0 14px;
+      }
+      .option-group input {
+        grid-column: 1;
+        margin: 0;
+        align-self: start;
+      }
+      .option-group label {
+        grid-column: 2;
+        margin: 0;
+      }
+      .option-group .example {
+        grid-column: 2;
+      }
+      .hint {
+        color: #57606a;
+        font-size: 11px;
+        margin-left: 8px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: #f6f8fa;
+        border: 1px solid #d0d7de;
+      }
+      .example {
+        color: #6e7781;
+        font-size: 11px;
+        margin: 0;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Copy format</h1>
+    <form id="copy-format-form">
+      <div class="option-group">
+        <input
+          type="radio"
+          name="copyFormat"
+          value="url-with-pr"
+          id="copy-format-url-with-pr"
+        />
+        <label for="copy-format-url-with-pr">
+          URL (with PR number)
+          <span class="hint">Default</span>
+        </label>
+        <div class="example">
+          e.g. https://github.com/sushidesu/greedy-github/pull/4/commits/cf5e2511832b0786361bc085c9010d3c4bc9ce26
+        </div>
+      </div>
+      <div class="option-group">
+        <input
+          type="radio"
+          name="copyFormat"
+          value="url-without-pr"
+          id="copy-format-url-without-pr"
+        />
+        <label for="copy-format-url-without-pr">URL (without PR number)</label>
+        <div class="example">
+          e.g. https://github.com/sushidesu/greedy-github/commit/cf5e2511832b0786361bc085c9010d3c4bc9ce26
+        </div>
+      </div>
+      <div class="option-group">
+        <input
+          type="radio"
+          name="copyFormat"
+          value="full-sha"
+          id="copy-format-full-sha"
+        />
+        <label for="copy-format-full-sha">Full SHA</label>
+        <div class="example">e.g. cf5e2511832b0786361bc085c9010d3c4bc9ce26</div>
+      </div>
+      <div class="option-group">
+        <input
+          type="radio"
+          name="copyFormat"
+          value="short-sha"
+          id="copy-format-short-sha"
+        />
+        <label for="copy-format-short-sha">Short SHA</label>
+        <div class="example">e.g. cf5e251</div>
+      </div>
+    </form>
+    <script src="options.js"></script>
+  </body>
+</html>
