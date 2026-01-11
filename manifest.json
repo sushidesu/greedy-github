@@ -3,7 +3,7 @@
   "manifest_version": 3,
   "name": "Greedy GitHub",
   "description": "Adds features I want to GitHub",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "icons": {
     "48": "./images/icon48.png",
     "128": "./images/icon128.png"
